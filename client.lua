@@ -231,15 +231,34 @@ RegisterNUICallback('escape', function(_, cb)
 end)
 
 --Main Thread
-CreateThread(function()
+
+CreateThread(function() -- ADDED TO NOT DISCONNECT PLAYERS FROM RADIO WHEN DOWNED
     while true do
         Wait(1000)
         if LocalPlayer.state.isLoggedIn and onRadio then
-            if not hasRadio or PlayerData.metadata.isdead or PlayerData.metadata.inlaststand then
+            if not hasRadio then 
                 if RadioChannel ~= 0 then
                     leaveradio()
                 end
             end
+            if PlayerData.metadata.isdead or PlayerData.metadata.inlaststand then
+                exports["pma-voice"]:setVoiceProperty("radioEnabled", false)
+            else
+                exports["pma-voice"]:setVoiceProperty("radioEnabled", true)
+            end
         end
     end
 end)
+
+-- CreateThread(function()
+--     while true do
+--         Wait(1000)
+--         if LocalPlayer.state.isLoggedIn and onRadio then
+--             if not hasRadio or PlayerData.metadata.isdead or PlayerData.metadata.inlaststand then
+--                 if RadioChannel ~= 0 then
+--                     leaveradio()
+--                 end
+--             end
+--         end
+--     end
+-- end)
